@@ -121,7 +121,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+            SceneManager.LoadScene("LobbyScene");
         }
 
         public override void OnLeftRoom()

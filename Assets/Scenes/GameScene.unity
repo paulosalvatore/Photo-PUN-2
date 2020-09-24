@@ -452,8 +452,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   InfoText: {fileID: 601629552}
   AsteroidPrefabs:
-  - {fileID: 151774, guid: 18a79aea49b60d342b7a672b7a34edbe, type: 3}
-  - {fileID: 140850, guid: 15f43343ba0a60e47a63d28496373c3f, type: 3}
+  - {fileID: 151774, guid: 2d41e8f93d0c6c24cb8cf0987c3e1031, type: 3}
+  - {fileID: 140850, guid: 5196e98a784fc7640813597a77a09b57, type: 3}
 --- !u!114 &964925488
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -466,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b579f4077cd5953489882224d803b137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerOverviewEntryPrefab: {fileID: 168392, guid: f03d1c686a26a1d4da99a4186b0bb1ab,
+  PlayerOverviewEntryPrefab: {fileID: 168392, guid: 6ec92deab5a63f544b05edfeb0dd73a5,
     type: 3}
 --- !u!114 &964925489
 MonoBehaviour:
@@ -532,7 +532,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b579f4077cd5953489882224d803b137, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  PlayerOverviewEntryPrefab: {fileID: 168392, guid: f03d1c686a26a1d4da99a4186b0bb1ab,
+  PlayerOverviewEntryPrefab: {fileID: 168392, guid: 6ec92deab5a63f544b05edfeb0dd73a5,
     type: 3}
 --- !u!114 &1363212419
 MonoBehaviour:
