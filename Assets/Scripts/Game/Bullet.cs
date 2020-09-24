@@ -23,7 +23,7 @@ namespace Photon.Pun.Demo.Asteroids
 
             transform.forward = originalDirection;
 
-            Rigidbody rigidbody = GetComponent<Rigidbody>();
+            var rigidbody = GetComponent<Rigidbody>();
             rigidbody.velocity = originalDirection * 200.0f;
             rigidbody.position += rigidbody.velocity * lag;
         }

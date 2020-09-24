@@ -8,12 +8,10 @@
 // <author>developer@exitgames.com</author>
 // --------------------------------------------------------------------------------------------------------------------
 
+using ExitGames.Client.Photon;
+using Photon.Pun.UtilityScripts;
 using UnityEngine;
 using UnityEngine.UI;
-
-using ExitGames.Client.Photon;
-using Photon.Realtime;
-using Photon.Pun.UtilityScripts;
 
 namespace Photon.Pun.Demo.Asteroids
 {
@@ -44,7 +42,12 @@ namespace Photon.Pun.Demo.Asteroids
             }
             else
             {
-                Hashtable initialProps = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}, {AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES}};
+                var initialProps = new Hashtable
+                {
+                    { AsteroidsGame.PLAYER_READY, isPlayerReady },
+                    { AsteroidsGame.PLAYER_LIVES, AsteroidsGame.PLAYER_MAX_LIVES }
+                };
+
                 PhotonNetwork.LocalPlayer.SetCustomProperties(initialProps);
                 PhotonNetwork.LocalPlayer.SetScore(0);
 
@@ -53,7 +56,7 @@ namespace Photon.Pun.Demo.Asteroids
                     isPlayerReady = !isPlayerReady;
                     SetPlayerReady(isPlayerReady);
 
-                    Hashtable props = new Hashtable() {{AsteroidsGame.PLAYER_READY, isPlayerReady}};
+                    var props = new Hashtable { { AsteroidsGame.PLAYER_READY, isPlayerReady } };
                     PhotonNetwork.LocalPlayer.SetCustomProperties(props);
 
                     if (PhotonNetwork.IsMasterClient)
@@ -79,7 +82,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         private void OnPlayerNumberingChanged()
         {
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (var p in PhotonNetwork.PlayerList)
             {
                 if (p.ActorNumber == ownerId)
                 {

@@ -9,19 +9,18 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections;
-
-using UnityEngine;
-using UnityEngine.UI;
-
-using Photon.Realtime;
 using Photon.Pun.UtilityScripts;
+using Photon.Realtime;
+using UnityEngine;
+using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Photon.Pun.Demo.Asteroids
 {
     public class AsteroidsGameManager : MonoBehaviourPunCallbacks
     {
-        public static AsteroidsGameManager Instance = null;
+        public static AsteroidsGameManager Instance;
 
         public Text InfoText;
 
@@ -43,10 +42,11 @@ namespace Photon.Pun.Demo.Asteroids
 
         public void Start()
         {
-            Hashtable props = new Hashtable
+            var props = new Hashtable
             {
-                {AsteroidsGame.PLAYER_LOADED_LEVEL, true}
+                { AsteroidsGame.PLAYER_LOADED_LEVEL, true }
             };
+
             PhotonNetwork.LocalPlayer.SetCustomProperties(props);
         }
 
@@ -65,41 +65,47 @@ namespace Photon.Pun.Demo.Asteroids
         {
             while (true)
             {
-                yield return new WaitForSeconds(Random.Range(AsteroidsGame.ASTEROIDS_MIN_SPAWN_TIME, AsteroidsGame.ASTEROIDS_MAX_SPAWN_TIME));
+                yield return new WaitForSeconds(Random.Range(AsteroidsGame.ASTEROIDS_MIN_SPAWN_TIME,
+                    AsteroidsGame.ASTEROIDS_MAX_SPAWN_TIME));
 
-                Vector2 direction = Random.insideUnitCircle;
-                Vector3 position = Vector3.zero;
+                var direction = Random.insideUnitCircle;
+                var position = Vector3.zero;
 
                 if (Mathf.Abs(direction.x) > Mathf.Abs(direction.y))
                 {
                     // Make it appear on the left/right side
-                    position = new Vector3(Mathf.Sign(direction.x) * Camera.main.orthographicSize * Camera.main.aspect, 0, direction.y * Camera.main.orthographicSize);
+                    position = new Vector3(Mathf.Sign(direction.x) * Camera.main.orthographicSize * Camera.main.aspect,
+                        0, direction.y * Camera.main.orthographicSize);
                 }
                 else
                 {
                     // Make it appear on the top/bottom
-                    position = new Vector3(direction.x * Camera.main.orthographicSize * Camera.main.aspect, 0, Mathf.Sign(direction.y) * Camera.main.orthographicSize);
+                    position = new Vector3(direction.x * Camera.main.orthographicSize * Camera.main.aspect, 0,
+                        Mathf.Sign(direction.y) * Camera.main.orthographicSize);
                 }
 
                 // Offset slightly so we are not out of screen at creation time (as it would destroy the asteroid right away)
                 position -= position.normalized * 0.1f;
 
+                var force = -position.normalized * 1000.0f;
+                var torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
+                object[] instantiationData = { force, torque, true };
 
-                Vector3 force = -position.normalized * 1000.0f;
-                Vector3 torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
-                object[] instantiationData = {force, torque, true};
-
-                PhotonNetwork.InstantiateSceneObject("BigAsteroid", position, Quaternion.Euler(Random.value * 360.0f, Random.value * 360.0f, Random.value * 360.0f), 0, instantiationData);
+                PhotonNetwork.InstantiateSceneObject("BigAsteroid", position,
+                    Quaternion.Euler(Random.value * 360.0f, Random.value * 360.0f, Random.value * 360.0f), 0,
+                    instantiationData);
             }
         }
 
         private IEnumerator EndOfGame(string winner, int score)
         {
-            float timer = 5.0f;
+            var timer = 5.0f;
 
             while (timer > 0.0f)
             {
-                InfoText.text = string.Format("Player {0} won with {1} points.\n\n\nReturning to login screen in {2} seconds.", winner, score, timer.ToString("n2"));
+                InfoText.text =
+                    string.Format("Player {0} won with {1} points.\n\n\nReturning to login screen in {2} seconds.",
+                        winner, score, timer.ToString("n2"));
 
                 yield return new WaitForEndOfFrame();
 
@@ -115,7 +121,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public override void OnDisconnected(DisconnectCause cause)
         {
-            UnityEngine.SceneManagement.SceneManager.LoadScene("DemoAsteroids-LobbyScene");
+            SceneManager.LoadScene("DemoAsteroids-LobbyScene");
         }
 
         public override void OnLeftRoom()
@@ -141,6 +147,7 @@ namespace Photon.Pun.Demo.Asteroids
             if (changedProps.ContainsKey(AsteroidsGame.PLAYER_LIVES))
             {
                 CheckEndOfGame();
+
                 return;
             }
 
@@ -149,10 +156,9 @@ namespace Photon.Pun.Demo.Asteroids
                 return;
             }
 
-
             // if there was no countdown yet, the master client (this one) waits until everyone loaded the level and sets a timer start
             int startTimestamp;
-            bool startTimeIsSet = CountdownTimer.TryGetStartTime(out startTimestamp);
+            var startTimeIsSet = CountdownTimer.TryGetStartTime(out startTimestamp);
 
             if (changedProps.ContainsKey(AsteroidsGame.PLAYER_LOADED_LEVEL))
             {
@@ -166,16 +172,14 @@ namespace Photon.Pun.Demo.Asteroids
                 else
                 {
                     // not all players loaded yet. wait:
-                    Debug.Log("setting text waiting for players! ",this.InfoText);
+                    Debug.Log("setting text waiting for players! ", InfoText);
                     InfoText.text = "Waiting for other players...";
                 }
             }
-        
         }
 
         #endregion
 
-        
         // called by OnCountdownTimerIsExpired() when the timer ended
         private void StartGame()
         {
@@ -184,14 +188,16 @@ namespace Photon.Pun.Demo.Asteroids
             // on rejoin, we have to figure out if the spaceship exists or not
             // if this is a rejoin (the ship is already network instantiated and will be setup via event) we don't need to call PN.Instantiate
 
-            
-            float angularStart = (360.0f / PhotonNetwork.CurrentRoom.PlayerCount) * PhotonNetwork.LocalPlayer.GetPlayerNumber();
-            float x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
-            float z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
-            Vector3 position = new Vector3(x, 0.0f, z);
-            Quaternion rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
+            var angularStart = 360.0f / PhotonNetwork.CurrentRoom.PlayerCount *
+                               PhotonNetwork.LocalPlayer.GetPlayerNumber();
 
-            PhotonNetwork.Instantiate("Spaceship", position, rotation, 0);      // avoid this call on rejoin (ship was network instantiated before)
+            var x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
+            var z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
+            var position = new Vector3(x, 0.0f, z);
+            var rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
+
+            PhotonNetwork.Instantiate("Spaceship", position,
+                rotation); // avoid this call on rejoin (ship was network instantiated before)
 
             if (PhotonNetwork.IsMasterClient)
             {
@@ -201,7 +207,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         private bool CheckAllPlayerLoadedLevel()
         {
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (var p in PhotonNetwork.PlayerList)
             {
                 object playerLoadedLevel;
 
@@ -221,16 +227,18 @@ namespace Photon.Pun.Demo.Asteroids
 
         private void CheckEndOfGame()
         {
-            bool allDestroyed = true;
+            var allDestroyed = true;
 
-            foreach (Player p in PhotonNetwork.PlayerList)
+            foreach (var p in PhotonNetwork.PlayerList)
             {
                 object lives;
+
                 if (p.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives))
                 {
                     if ((int) lives > 0)
                     {
                         allDestroyed = false;
+
                         break;
                     }
                 }
@@ -243,10 +251,10 @@ namespace Photon.Pun.Demo.Asteroids
                     StopAllCoroutines();
                 }
 
-                string winner = "";
-                int score = -1;
+                var winner = "";
+                var score = -1;
 
-                foreach (Player p in PhotonNetwork.PlayerList)
+                foreach (var p in PhotonNetwork.PlayerList)
                 {
                     if (p.GetScore() > score)
                     {

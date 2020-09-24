@@ -9,10 +9,8 @@
 // --------------------------------------------------------------------------------------------------------------------
 
 using System.Collections;
-
-using UnityEngine;
-
 using Photon.Pun.UtilityScripts;
+using UnityEngine;
 using Hashtable = ExitGames.Client.Photon.Hashtable;
 
 namespace Photon.Pun.Demo.Asteroids
@@ -35,9 +33,9 @@ namespace Photon.Pun.Demo.Asteroids
         private new Renderer renderer;
 #pragma warning restore 0109
 
-        private float rotation = 0.0f;
-        private float acceleration = 0.0f;
-        private float shootingTimer = 0.0f;
+        private float rotation;
+        private float acceleration;
+        private float shootingTimer;
 
         private bool controllable = true;
 
@@ -54,7 +52,7 @@ namespace Photon.Pun.Demo.Asteroids
 
         public void Start()
         {
-            foreach (Renderer r in GetComponentsInChildren<Renderer>())
+            foreach (var r in GetComponentsInChildren<Renderer>())
             {
                 r.material.color = AsteroidsGame.GetColor(photonView.Owner.GetPlayerNumber());
             }
@@ -95,13 +93,13 @@ namespace Photon.Pun.Demo.Asteroids
                 return;
             }
 
-            Quaternion rot = rigidbody.rotation * Quaternion.Euler(0, rotation * RotationSpeed * Time.fixedDeltaTime, 0);
+            var rot = rigidbody.rotation * Quaternion.Euler(0, rotation * RotationSpeed * Time.fixedDeltaTime, 0);
             rigidbody.MoveRotation(rot);
 
-            Vector3 force = (rot * Vector3.forward) * acceleration * 1000.0f * MovementSpeed * Time.fixedDeltaTime;
+            var force = rot * Vector3.forward * acceleration * 1000.0f * MovementSpeed * Time.fixedDeltaTime;
             rigidbody.AddForce(force);
 
-            if (rigidbody.velocity.magnitude > (MaxSpeed * 1000.0f))
+            if (rigidbody.velocity.magnitude > MaxSpeed * 1000.0f)
             {
                 rigidbody.velocity = rigidbody.velocity.normalized * MaxSpeed * 1000.0f;
             }
@@ -141,11 +139,13 @@ namespace Photon.Pun.Demo.Asteroids
             if (photonView.IsMine)
             {
                 object lives;
+
                 if (PhotonNetwork.LocalPlayer.CustomProperties.TryGetValue(AsteroidsGame.PLAYER_LIVES, out lives))
                 {
-                    PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable {{AsteroidsGame.PLAYER_LIVES, ((int) lives <= 1) ? 0 : ((int) lives - 1)}});
+                    PhotonNetwork.LocalPlayer.SetCustomProperties(new Hashtable
+                        { { AsteroidsGame.PLAYER_LIVES, (int) lives <= 1 ? 0 : (int) lives - 1 } });
 
-                    if (((int) lives) > 1)
+                    if ((int) lives > 1)
                     {
                         StartCoroutine("WaitForRespawn");
                     }
@@ -156,13 +156,14 @@ namespace Photon.Pun.Demo.Asteroids
         [PunRPC]
         public void Fire(Vector3 position, Quaternion rotation, PhotonMessageInfo info)
         {
-            float lag = (float) (PhotonNetwork.Time - info.SentServerTime);
+            var lag = (float) (PhotonNetwork.Time - info.SentServerTime);
             GameObject bullet;
 
             /** Use this if you want to fire one bullet at a time **/
-            bullet = Instantiate(BulletPrefab, position, Quaternion.identity) as GameObject;
-            bullet.GetComponent<Bullet>().InitializeBullet(photonView.Owner, (rotation * Vector3.forward), Mathf.Abs(lag));
+            bullet = Instantiate(BulletPrefab, position, Quaternion.identity);
 
+            bullet.GetComponent<Bullet>()
+                .InitializeBullet(photonView.Owner, rotation * Vector3.forward, Mathf.Abs(lag));
 
             /** Use this if you want to fire two bullets at once **/
             //Vector3 baseX = rotation * Vector3.right;
@@ -188,7 +189,7 @@ namespace Photon.Pun.Demo.Asteroids
             EngineTrail.SetActive(true);
             Destruction.Stop();
         }
-        
+
         #endregion
 
         private void CheckExitScreen()
@@ -197,17 +198,26 @@ namespace Photon.Pun.Demo.Asteroids
             {
                 return;
             }
-            
-            if (Mathf.Abs(rigidbody.position.x) > (Camera.main.orthographicSize * Camera.main.aspect))
+
+            if (Mathf.Abs(rigidbody.position.x) > Camera.main.orthographicSize * Camera.main.aspect)
             {
-                rigidbody.position = new Vector3(-Mathf.Sign(rigidbody.position.x) * Camera.main.orthographicSize * Camera.main.aspect, 0, rigidbody.position.z);
-                rigidbody.position -= rigidbody.position.normalized * 0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
+                rigidbody.position =
+                    new Vector3(-Mathf.Sign(rigidbody.position.x) * Camera.main.orthographicSize * Camera.main.aspect,
+                        0, rigidbody.position.z);
+
+                rigidbody.position -=
+                    rigidbody.position.normalized *
+                    0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
             }
 
             if (Mathf.Abs(rigidbody.position.z) > Camera.main.orthographicSize)
             {
-                rigidbody.position = new Vector3(rigidbody.position.x, rigidbody.position.y, -Mathf.Sign(rigidbody.position.z) * Camera.main.orthographicSize);
-                rigidbody.position -= rigidbody.position.normalized * 0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
+                rigidbody.position = new Vector3(rigidbody.position.x, rigidbody.position.y,
+                    -Mathf.Sign(rigidbody.position.z) * Camera.main.orthographicSize);
+
+                rigidbody.position -=
+                    rigidbody.position.normalized *
+                    0.1f; // offset a little bit to avoid looping back & forth between the 2 edges 
             }
         }
     }

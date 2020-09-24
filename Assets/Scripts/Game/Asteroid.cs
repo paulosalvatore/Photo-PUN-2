@@ -8,10 +8,8 @@
 // <author>developer@exitgames.com</author>
 // --------------------------------------------------------------------------------------------------------------------
 
-using UnityEngine;
-
-using Random = UnityEngine.Random;
 using Photon.Pun.UtilityScripts;
+using UnityEngine;
 
 namespace Photon.Pun.Demo.Asteroids
 {
@@ -51,7 +49,8 @@ namespace Photon.Pun.Demo.Asteroids
                 return;
             }
 
-            if (Mathf.Abs(transform.position.x) > Camera.main.orthographicSize * Camera.main.aspect || Mathf.Abs(transform.position.z) > Camera.main.orthographicSize)
+            if (Mathf.Abs(transform.position.x) > Camera.main.orthographicSize * Camera.main.aspect ||
+                Mathf.Abs(transform.position.z) > Camera.main.orthographicSize)
             {
                 // Out of the screen
                 PhotonNetwork.Destroy(gameObject);
@@ -69,7 +68,7 @@ namespace Photon.Pun.Demo.Asteroids
             {
                 if (photonView.IsMine)
                 {
-                    Bullet bullet = collision.gameObject.GetComponent<Bullet>();
+                    var bullet = collision.gameObject.GetComponent<Bullet>();
                     bullet.Owner.AddScore(isLargeAsteroid ? 2 : 1);
 
                     DestroyAsteroidGlobally();
@@ -98,15 +97,18 @@ namespace Photon.Pun.Demo.Asteroids
 
             if (isLargeAsteroid)
             {
-                int numberToSpawn = Random.Range(3, 6);
+                var numberToSpawn = Random.Range(3, 6);
 
-                for (int counter = 0; counter < numberToSpawn; ++counter)
+                for (var counter = 0; counter < numberToSpawn; ++counter)
                 {
-                    Vector3 force = Quaternion.Euler(0, counter * 360.0f / numberToSpawn, 0) * Vector3.forward * Random.Range(0.5f, 1.5f) * 300.0f;
-                    Vector3 torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
-                    object[] instantiationData = {force, torque, false, PhotonNetwork.Time};
+                    var force = Quaternion.Euler(0, counter * 360.0f / numberToSpawn, 0) * Vector3.forward *
+                                Random.Range(0.5f, 1.5f) * 300.0f;
 
-                    PhotonNetwork.InstantiateSceneObject("SmallAsteroid", transform.position + force.normalized * 10.0f, Quaternion.Euler(0, Random.value * 180.0f, 0), 0, instantiationData);
+                    var torque = Random.insideUnitSphere * Random.Range(500.0f, 1500.0f);
+                    object[] instantiationData = { force, torque, false, PhotonNetwork.Time };
+
+                    PhotonNetwork.InstantiateSceneObject("SmallAsteroid", transform.position + force.normalized * 10.0f,
+                        Quaternion.Euler(0, Random.value * 180.0f, 0), 0, instantiationData);
                 }
             }
 
