@@ -133,7 +133,7 @@ namespace Photon.Pun.Demo.Asteroids
         {
             if (PhotonNetwork.LocalPlayer.ActorNumber == newMasterClient.ActorNumber)
             {
-                StartCoroutine(SpawnAsteroid());
+                //StartCoroutine(SpawnAsteroid());
             }
         }
 
@@ -196,12 +196,11 @@ namespace Photon.Pun.Demo.Asteroids
             var position = new Vector3(x, 0.0f, z);
             var rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
 
-            PhotonNetwork.Instantiate("Spaceship", position,
-                rotation); // avoid this call on rejoin (ship was network instantiated before)
+            PhotonNetwork.Instantiate("Player", position, rotation);
 
             if (PhotonNetwork.IsMasterClient)
             {
-                StartCoroutine(SpawnAsteroid());
+                //StartCoroutine(SpawnAsteroid());
             }
         }
 
