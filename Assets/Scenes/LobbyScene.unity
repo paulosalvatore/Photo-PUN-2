@@ -212,7 +212,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnLeaveGameButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -594,7 +594,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnBackButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -1992,7 +1992,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnStartGameButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -2911,7 +2911,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnRoomListButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -3062,7 +3062,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1165784656}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fe0a55ef565e3984f8866c5c91e3c2fd, type: 3}
+  m_Script: {fileID: 11500000, guid: 9bb9b59fe932566438ef4058176c79ea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   ConnectionStatusText: {fileID: 759308736}
@@ -3212,7 +3212,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1310044695}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 84fd812a67908014cb408f749ca7a55e, type: 3}
+  m_Script: {fileID: 11500000, guid: 6a53ce64ee286f64794e72db53d69c6c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   LoginPanel: {fileID: 964844637}
@@ -3531,7 +3531,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: SetActivePanel
         m_Mode: 5
         m_Arguments:
@@ -4032,7 +4032,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnCreateRoomButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -4158,7 +4158,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnJoinRandomRoomButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -4537,7 +4537,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnBackButtonClicked
         m_Mode: 1
         m_Arguments:
@@ -4705,7 +4705,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1310044697}
+      - m_Target: {fileID: 0}
         m_MethodName: OnLoginButtonClicked
         m_Mode: 1
         m_Arguments:
