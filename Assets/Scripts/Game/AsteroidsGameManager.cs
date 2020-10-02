@@ -199,7 +199,7 @@ namespace Photon.Pun.Demo.Asteroids
             // var position = new Vector3(x, 0.0f, z);
             var rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
 
-            PhotonNetwork.Instantiate("Player", startPoint.position, rotation);
+            PhotonNetwork.Instantiate("Player", transform.position, rotation);
 
             if (PhotonNetwork.IsMasterClient)
             {
