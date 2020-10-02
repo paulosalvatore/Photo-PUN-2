@@ -26,6 +26,9 @@ namespace Photon.Pun.Demo.Asteroids
 
         public GameObject[] AsteroidPrefabs;
 
+        [SerializeField]
+        private Transform startPoint;
+
         #region UNITY
 
         public void Awake()
@@ -191,12 +194,12 @@ namespace Photon.Pun.Demo.Asteroids
             var angularStart = 360.0f / PhotonNetwork.CurrentRoom.PlayerCount *
                                PhotonNetwork.LocalPlayer.GetPlayerNumber();
 
-            var x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
-            var z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
-            var position = new Vector3(x, 0.0f, z);
+            // var x = 20.0f * Mathf.Sin(angularStart * Mathf.Deg2Rad);
+            // var z = 20.0f * Mathf.Cos(angularStart * Mathf.Deg2Rad);
+            // var position = new Vector3(x, 0.0f, z);
             var rotation = Quaternion.Euler(0.0f, angularStart, 0.0f);
 
-            PhotonNetwork.Instantiate("Player", position, rotation);
+            PhotonNetwork.Instantiate("Player", startPoint.position, rotation);
 
             if (PhotonNetwork.IsMasterClient)
             {
